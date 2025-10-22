@@ -1,17 +1,25 @@
-import express from'express'  
-import morgan from 'morgan'
-import cookieParser from 'cookie-parser'
+import express from 'express';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import cors from 'cors'; // <-- ✨ IMPORTANTE
 
-import authRoutes from './routes/auth.routes.js'
-import taskRoutes from './routes/tasks.routes.js'
+import authRoutes from './routes/auth.routes.js';
+import taskRoutes from './routes/tasks.routes.js';
 
-const  app  = express()
+const app = express();
 
-app.use(morgan('dev'))
-app.use(express.json())
-app.use(cookieParser())
+// 🧩 Configurar CORS
+app.use(cors({
+  origin: 'http://localhost:3001', // dirección del frontend
+  credentials: true, // permite enviar cookies o cabeceras de autenticación
+}));
 
-app.use('/api',authRoutes)
-app.use('/api',taskRoutes)
+app.use(morgan('dev'));
+app.use(express.json());
+app.use(cookieParser());
 
-export default app
+// 🔗 Rutas
+app.use('/api', authRoutes);
+app.use('/api', taskRoutes);
+
+export default app;
