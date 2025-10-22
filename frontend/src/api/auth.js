@@ -13,5 +13,5 @@ export const logout = async () => {
 
 export const registerRequest = async (user) =>
   await axios.post(`${API}/register`, user, {
-    withCredentials: true, // Para enviar cookies o tokens
+    withCredentials: true, 
   });
