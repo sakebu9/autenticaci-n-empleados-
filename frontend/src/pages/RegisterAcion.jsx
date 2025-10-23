@@ -1,0 +1,2 @@
+//agregar cedula si no esta en la base, mostrar las opciones de la accion: ingreso, ingreso almuerzo, regreso almuerzo y salida 
+//mostrar la fecha y hora actual mientras se carga el registro registro exitoso o error si pasa algo
