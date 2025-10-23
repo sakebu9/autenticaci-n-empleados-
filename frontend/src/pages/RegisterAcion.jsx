@@ -1,131 +1,104 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 function RegisterAcion() {
-  const [cedula, setCedula] = useState("");
-  const [accion, setAccion] = useState("");
   const [mensaje, setMensaje] = useState("");
-  const [fechaHora, setFechaHora] = useState(new Date());
-  const [loading, setLoading] = useState(false);
-  const [registrado, setRegistrado] = useState(false);
+  const [form, setForm] = useState({
+    cedula: "",
+    accion: "",
+  });
 
-  // ⏰ Actualizar hora cada segundo
-  useEffect(() => {
-    const timer = setInterval(() => setFechaHora(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  // 🧾 Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!cedula.trim()) {
-      setMensaje("⚠️ Ingresa una cédula válida");
-      return;
-    }
-
-    if (!accion) {
-      setMensaje("⚠️ Selecciona una acción");
-      return;
-    }
-
-    setMensaje("⏳ Registrando...");
-    setLoading(true);
-
     try {
-      // Simular solicitud al servidor (puedes cambiar a tu API real)
-      // const res = await axios.post("http://localhost:3001/api/registro", { cedula, accion });
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Aquí iría tu POST para registrar la acción
+      setMensaje("✅ Acción registrada correctamente");
+    } catch (error) {
+      setMensaje("❌ Error al registrar la acción");
+    }
+  };
 
-      // Simular verificación
-      const cedulasRegistradas = ["12345", "67890"]; // ejemplo simulado
-      if (!cedulasRegistradas.includes(cedula)) {
-        setMensaje("🆕 Cédula no encontrada, agregada exitosamente ✅");
+  const handleLogout = async () => {
+    try {
+      const res = await axios.post("http://localhost:3000/api/logout", {}, {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        localStorage.removeItem("token");
+        setMensaje("👋 Sesión cerrada");
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
       } else {
-        setMensaje("✅ Registro exitoso");
+        setMensaje("❌ Error al cerrar sesión");
       }
-
-      setRegistrado(true);
     } catch (error) {
       console.error(error);
-      setMensaje("❌ Error al conectar con el servidor");
-    } finally {
-      setLoading(false);
+      setMensaje("❌ Error al cerrar sesión");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-      <div className="bg-white/90 backdrop-blur-xl p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-200">
-        <h1 className="text-2xl font-bold mb-6 text-center text-blue-600">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200">
+      <div className="bg-white shadow-lg rounded-3xl p-8 w-full max-w-sm border border-gray-200">
+        <h1 className="text-center text-2xl font-semibold text-gray-800 mb-6">
           Registrar Acción
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Cédula */}
           <div>
-            <label className="block text-gray-700 font-medium">Cédula</label>
+            <label className="block text-sm text-gray-600 mb-1">Cédula</label>
             <input
               type="text"
-              value={cedula}
-              onChange={(e) => setCedula(e.target.value)}
-              required
-              className="w-full p-2 border rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              name="cedula"
               placeholder="Ingrese su cédula"
-              disabled={loading}
+              value={form.cedula}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"
             />
           </div>
 
-          {/* Acción */}
           <div>
-            <label className="block text-gray-700 font-medium">Acción</label>
+            <label className="block text-sm text-gray-600 mb-1">Acción</label>
             <select
-              value={accion}
-              onChange={(e) => setAccion(e.target.value)}
-              required
-              className="w-full p-2 border rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              disabled={loading}
+              name="accion"
+              value={form.accion}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition bg-white"
             >
               <option value="">Seleccionar acción</option>
-              <option value="ingreso">Ingreso</option>
-              <option value="ingreso_almuerzo">Ingreso almuerzo</option>
-              <option value="regreso_almuerzo">Regreso almuerzo</option>
-              <option value="salida">Salida</option>
+              <option value="Ingreso">Ingreso</option>
+              <option value="Almuerzo">Almuerzo</option>
+              <option value="Salida">Salida</option>
             </select>
           </div>
 
-          {/* Fecha y hora actual */}
-          <div className="text-center text-gray-600 text-sm font-medium">
-            {fechaHora.toLocaleString()}
-          </div>
+          <p className="text-center text-xs text-gray-500">
+            {new Date().toLocaleString()}
+          </p>
 
-          {/* Botón */}
           <button
             type="submit"
-            disabled={loading}
-            className={`w-full py-2 rounded-lg font-semibold transition ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 text-white"
-            }`}
+            className="w-full bg-gray-900 text-white py-2 rounded-xl font-medium hover:bg-gray-800 transition"
           >
-            {loading ? "Registrando..." : "Registrar"}
+            Registrar
+          </button>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="w-full bg-gray-200 text-gray-800 py-2 rounded-xl font-medium hover:bg-gray-300 transition"
+          >
+            Cerrar sesión
           </button>
         </form>
 
-        {/* Mensaje de estado */}
         {mensaje && (
-          <div
-            className={`mt-4 text-center font-medium ${
-              mensaje.includes("✅") || mensaje.includes("🆕")
-                ? "text-green-600"
-                : mensaje.includes("❌")
-                ? "text-red-600"
-                : "text-gray-700"
-            }`}
-          >
-            {mensaje}
-          </div>
+          <p className="text-center text-sm text-gray-700 mt-4">{mensaje}</p>
         )}
       </div>
     </div>

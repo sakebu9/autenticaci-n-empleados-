@@ -13,7 +13,9 @@ function LoginPage() {
     try {
       const res = await login({ email, password });
       console.log(res.data);
-      alert("Inicio de sesión exitoso ✅");
+
+      // ✅ Redirigir a la página de registro de acción
+      navigate("/register-acion");
     } catch (err) {
       setError(err.response?.data?.error || "Error al iniciar sesión ❌");
     }
@@ -22,7 +24,6 @@ function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200">
       <div className="bg-white/80 backdrop-blur-2xl shadow-[0_8px_40px_rgba(0,0,0,0.08)] rounded-3xl p-10 w-full max-w-md border border-gray-200 text-center">
-        {/* Logo estilo Apple */}
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-gray-900">Iniciar sesión</h1>
           <p className="text-gray-500 text-sm mt-1">Bienvenido de nuevo</p>
@@ -61,7 +62,6 @@ function LoginPage() {
 
         {error && <p className="mt-4 text-red-500 text-sm">{error}</p>}
 
-        {/* Enlace a registro */}
         <p className="mt-8 text-gray-600 text-sm">
           ¿No tienes cuenta?{" "}
           <button
@@ -71,7 +71,6 @@ function LoginPage() {
             Regístrate aquí
           </button>
         </p>
-
       </div>
     </div>
   );
