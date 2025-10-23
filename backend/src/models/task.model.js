@@ -20,5 +20,5 @@ const taskSchema = new mongoose.Schema({
 },{
     timestamps: true,
 });
-//agregar cedula, tipo de accion, ip
+//agregar cedula tipo de accion, ip
 export default mongoose.model("Task", taskSchema);

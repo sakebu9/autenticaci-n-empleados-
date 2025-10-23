@@ -19,5 +19,5 @@ const userSchema = new mongoose.Schema({
 },{
     timestamps: true
 })
-
+//agregar 
 export default mongoose.model('User',userSchema)
