@@ -1,6 +1,8 @@
-import app    from './app.js'
-import {connectDB} from './db.js'
+import 'dotenv/config'; // <-- importa dotenv
+import app from './app.js';
+import { connectDB } from './db.js';
 
-connectDB()
-app.listen(3000)    
-console.log('server on port',3000)
+connectDB();
+app.listen(process.env.PORT);
+
+console.log('✅ Server on port', process.env.PORT);

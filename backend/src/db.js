@@ -1,10 +1,10 @@
-import mongoose  from "mongoose";
+import mongoose from 'mongoose';
 
-export const connectDB = async() => {
- try {
-    await mongoose.connect('mongodb://localhost/merndb')
-    console.log('>>> DB is connected')
- } catch (error) {
-    console.log(error)
- }
-}
+export const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('✅ DB is connected');
+  } catch (error) {
+    console.error('❌ Database connection error:', error);
+  }
+};
