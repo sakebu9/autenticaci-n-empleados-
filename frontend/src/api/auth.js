@@ -1,7 +1,7 @@
 // src/api/auth.js
 import axios from "axios";
 
-const API = "http://localhost:3000/api"; // cambia el puerto si tu backend usa otro
+const API = process.env.REACT_APP_API;// cambia el puerto si tu backend usa otro
 
 export const login = async (data) => {
   return axios.post(`${API}/login`, data);
