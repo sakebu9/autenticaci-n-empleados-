@@ -22,7 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-git rm --cached backend/.env
-git rm --cached frontend/.env
-git commit -m "Remover .env del repositorio"
-git push
+# Ignorar archivos .env
+backend/.env
+frontend/.env
