@@ -1,9 +1,11 @@
 import User from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import {createAccessToken}  from '../libs/jwt.js'
+import Role from "../models/role.model.js"
+
 
 export const register = async(req, res) => {
-    const {email, password, username } = req.body;
+    const {email, password, username,roles } = req.body;
 
     try {
 
@@ -12,8 +14,16 @@ export const register = async(req, res) => {
         const newUser = new User({
             username,
             email,
-            password : passwordHash 
+            password : passwordHash,
         });
+
+        if(roles){
+           const foundRoles = await Role.find({name: {$in: roles}})
+                newUser.role = foundRoles.map((role) => role._id);
+        } else {
+            const role = await Role.findOne({name: 'user'});
+            newUser.role = [role._id];
+        }
 
         const userSave = await newUser.save();
         const token = await createAccessToken({id: userSave._id})
@@ -36,9 +46,10 @@ export const login = async(req, res) => {
 
     try {
         
-        const userFound = await User.findOne({ email });
+        const userFound = await User.findOne({ email }).populate("role");
     
         if (!userFound) return res.status(400).json({message: 'User not found'})
+        
         
         const isMatch = await bcrypt.compare(password, userFound.password)
 
