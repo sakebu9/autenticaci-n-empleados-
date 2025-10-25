@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authRequired } from "../middlewares/validateToken.js";
+
 import {
   getTasks,
   getTask,
@@ -8,11 +8,12 @@ import {
   updateTask,
 } from "../controllers/tasks.controller.js";
 import { validateSchema } from "../middlewares/validator.middleware.js";
+import { authRequired,isAdmin } from "../middlewares/validateToken.js";
 import { createTaskSchema } from "../schemas/tasks.schema.js";
 
 const router = Router();
 
-router.get("/tasks", authRequired, getTasks);
+router.get("/tasks", authRequired, isAdmin , getTasks);
 
 router.get("/tasks/:id", authRequired, getTask);
 

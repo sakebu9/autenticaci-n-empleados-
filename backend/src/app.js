@@ -7,6 +7,7 @@ import  {createRoles}   from './libs/initialsetup.js';
 
 import authRoutes from './routes/auth.routes.js';
 import taskRoutes from './routes/tasks.routes.js';
+import userRoutes from './routes/user.routes.js';
 
 const app = express();
 createRoles();
@@ -22,5 +23,6 @@ app.use(cookieParser());
 
 app.use('/api', authRoutes);
 app.use('/api', taskRoutes);
+app.use('/api', userRoutes);
 
 export default app;
